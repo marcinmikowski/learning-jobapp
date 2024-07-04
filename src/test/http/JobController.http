@@ -1,0 +1,49 @@
+###
+GET localhost:8080/jobs
+Accept: application/json
+Accept-Charset: UTF-8
+
+###
+POST localhost:8080/jobs
+Accept: application/json
+Accept-Charset: UTF-8
+Content-Type: application/json
+Content-Encoding: UTF-8
+
+{
+  "title": "Software Engineer",
+  "description": "Developing applications",
+  "minSalary": "30000",
+  "maxSalary": "40000",
+  "location": "New Jersey"
+}
+
+###
+GET localhost:8080/jobs/1
+Accept: application/json
+Accept-Charset: UTF-8
+
+###
+GET localhost:8080/jobs/100
+Accept: application/json
+Accept-Charset: UTF-8
+
+###
+PUT localhost:8080/jobs/1
+Accept: application/json
+Accept-Charset: UTF-8
+Content-Type: application/json
+Content-Encoding: UTF-8
+
+{
+  "title": "Software Engineer Principal",
+  "description": "Developing applications",
+  "minSalary": "60000",
+  "maxSalary": "80000",
+  "location": "New Jersey"
+}
+
+###
+DELETE localhost:8080/jobs/2
+Accept: application/json
+Accept-Charset: UTF-8
