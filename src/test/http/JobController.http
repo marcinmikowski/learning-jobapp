@@ -4,6 +4,35 @@ Accept: application/json
 Accept-Charset: UTF-8
 
 ###
+GET localhost:8080/companies
+Accept: application/json
+Accept-Charset: UTF-8
+
+###
+POST localhost:8080/companies
+Accept: application/json
+Accept-Charset: UTF-8
+Content-Type: application/json
+Content-Encoding: UTF-8
+
+{
+  "name": "ACME SA",
+  "description": "Developing company"
+}
+
+###
+POST localhost:8080/companies
+Accept: application/json
+Accept-Charset: UTF-8
+Content-Type: application/json
+Content-Encoding: UTF-8
+
+{
+"name": "TRANS SA",
+"description": "Developing company"
+}
+
+###
 POST localhost:8080/jobs
 Accept: application/json
 Accept-Charset: UTF-8
@@ -15,11 +44,19 @@ Content-Encoding: UTF-8
   "description": "Developing applications",
   "minSalary": "30000",
   "maxSalary": "40000",
-  "location": "New Jersey"
+  "location": "New Jersey",
+  "company": {
+    "id": 1
+  }
 }
 
 ###
 GET localhost:8080/jobs/1
+Accept: application/json
+Accept-Charset: UTF-8
+
+###
+GET localhost:8080/companies/2
 Accept: application/json
 Accept-Charset: UTF-8
 
@@ -29,7 +66,7 @@ Accept: application/json
 Accept-Charset: UTF-8
 
 ###
-PUT localhost:8080/jobs/1
+PUT localhost:8080/jobs/2
 Accept: application/json
 Accept-Charset: UTF-8
 Content-Type: application/json
@@ -40,10 +77,11 @@ Content-Encoding: UTF-8
   "description": "Developing applications",
   "minSalary": "60000",
   "maxSalary": "80000",
-  "location": "New Jersey"
+  "location": "New Jersey",
+  "company": { "id":  1 }
 }
 
 ###
-DELETE localhost:8080/jobs/2
+DELETE localhost:8080/jobs/1
 Accept: application/json
 Accept-Charset: UTF-8

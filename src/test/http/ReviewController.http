@@ -1,0 +1,40 @@
+###
+GET localhost:8080/companies/1/reviews
+Accept: application/json
+Accept-Charset: UTF-8
+
+###
+GET localhost:8080/companies/1/reviews/1
+Accept: application/json
+Accept-Charset: UTF-8
+
+###
+POST localhost:8080//companies/2/reviews
+Accept: application/json
+Accept-Charset: UTF-8
+Content-Type: application/json
+Content-Encoding: UTF-8
+
+{
+  "title": "Some review 3",
+  "description": "Lorem ipsum 3",
+  "score": 5.0
+}
+
+###
+PUT localhost:8080//companies/1/reviews/1
+Accept: application/json
+Accept-Charset: UTF-8
+Content-Type: application/json
+Content-Encoding: UTF-8
+
+{
+  "title": "Some review 1",
+  "description": "Lorem ipsum 1",
+  "score": 9.0
+}
+
+###
+DELETE localhost:8080/companies/1/reviews/2
+Accept: application/json
+Accept-Charset: UTF-8

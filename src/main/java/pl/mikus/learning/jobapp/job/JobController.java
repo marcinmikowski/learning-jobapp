@@ -29,7 +29,7 @@ public class JobController {
 
     @PostMapping
     public ResponseEntity<?> createJob(@RequestBody Job job) {
-        return ResponseEntity.ok(jobService.createJob(job));
+        return ResponseEntity.of(jobService.createJob(job));
     }
 
     @GetMapping("/{id}")
@@ -37,14 +37,14 @@ public class JobController {
         return ResponseEntity.of(jobService.findJob(id));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateJob(@PathVariable Long id, @RequestBody Job job) {
+        return ResponseEntity.of(jobService.updateJob(id, job));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteJobById(@PathVariable Long id) {
         if (jobService.deleteJob(id)) return ResponseEntity.ok().build();
         return ResponseEntity.notFound().build();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateJob(@PathVariable Long id, @RequestBody Job job) {
-        return ResponseEntity.of(jobService.updateJob(id, job));
     }
 }

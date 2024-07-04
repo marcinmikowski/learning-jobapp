@@ -1,22 +1,36 @@
 package pl.mikus.learning.jobapp.job;
 
-import lombok.AccessLevel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
+import pl.mikus.learning.jobapp.company.Company;
 
 @Builder(toBuilder = true)
-@Getter
+@Getter @Setter
 @ToString
-@EqualsAndHashCode(cacheStrategy = EqualsAndHashCode.CacheStrategy.LAZY)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class Job {
-    private final Long id;
-    private final String title;
-    private final String description;
-    private final String minSalary;
-    private final String maxSalary;
-    private final String location;
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String title;
+    private String description;
+    private String minSalary;
+    private String maxSalary;
+    private String location;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Company company;
 }

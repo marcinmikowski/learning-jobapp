@@ -5,12 +5,8 @@ import java.util.Optional;
 
 public interface JobService {
     List<Job> findAll();
-
-    Job createJob(Job job);
-
+    Optional<Job> createJob(Job job);
     Optional<Job> findJob(Long id);
-
-    boolean deleteJob(Long id);
-
     Optional<Job> updateJob(Long id, Job job);
+    boolean deleteJob(Long id);
 }

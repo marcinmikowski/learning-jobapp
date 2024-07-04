@@ -1,47 +1,81 @@
 package pl.mikus.learning.jobapp.job.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pl.mikus.learning.jobapp.company.Company;
+import pl.mikus.learning.jobapp.company.CompanyRepository;
 import pl.mikus.learning.jobapp.job.Job;
+import pl.mikus.learning.jobapp.job.JobRepository;
 import pl.mikus.learning.jobapp.job.JobService;
+import pl.mikus.learning.jobapp.job.mapper.JobMapper;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
+@RequiredArgsConstructor
+@Transactional
 class JobServiceImpl implements JobService {
-    private static final List<Job> jobs = new CopyOnWriteArrayList<>();
-    private static final AtomicLong integer = new AtomicLong(1);
 
+    private final JobMapper jobMapper;
+    private final JobRepository jobRepository;
+    private final CompanyRepository companyRepository;
+
+    @Transactional(readOnly = true)
     @Override
     public List<Job> findAll() {
-        return jobs;
+        return jobMapper.toDto(jobRepository.findAll());
     }
 
     @Override
-    public Job createJob(Job job) {
-        final Job jobToSave = job.toBuilder().id(integer.getAndIncrement()).build();
-        jobs.add(jobToSave);
-        return jobToSave;
+    public Optional<Job> createJob(Job job) {
+        final Optional<Company> company = findCompanyForJob(job);
+        if (company.isEmpty() && isCompanyIdForJobSet(job)) {
+            return Optional.empty();
+        }
+        return jobMapper.toDto(Optional.of(
+                jobRepository.save(
+                        job.toBuilder().id(null).company(company.orElse(null)).build()
+                ))
+        );
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<Job> findJob(Long id) {
-        return jobs.stream().filter(j -> j.getId().equals(id)).findFirst();
-    }
-
-    @Override
-    public boolean deleteJob(Long id) {
-        return jobs.removeIf(j -> j.getId().equals(id));
+        return jobMapper.toDto(jobRepository.findById(id));
     }
 
     @Override
     public Optional<Job> updateJob(Long id, Job job) {
-        return findJob(id).map(j -> {
-            var r = job.toBuilder().id(j.getId()).build();
-            jobs.set(jobs.indexOf(j), r);
-            return r;
-        });
+        final Optional<Company> company = findCompanyForJob(job);
+        if (company.isEmpty() && isCompanyIdForJobSet(job)) {
+            return Optional.empty();
+        }
+        return jobMapper.toDto(jobRepository.findById(id)
+                .map(_ -> jobRepository.save(
+                        job.toBuilder().company(company.orElse(null)).id(id).build())
+                ));
+    }
+
+    private Optional<Company> findCompanyForJob(Job job) {
+        if (isCompanyIdForJobSet(job)) {
+            return companyRepository.findById(job.getCompany().getId());
+        }
+        return Optional.empty();
+    }
+
+    private boolean isCompanyIdForJobSet(Job job) {
+        return Objects.nonNull(job.getCompany()) && Objects.nonNull(job.getCompany().getId());
+    }
+
+    @Override
+    public boolean deleteJob(Long id) {
+        return jobRepository.findById(id).map(j -> {
+            jobRepository.delete(j);
+            return true;
+        }).orElse(false);
     }
 }
