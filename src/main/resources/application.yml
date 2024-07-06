@@ -1,15 +1,49 @@
 spring:
   application:
       name: jobapp
-  h2:
-    console:
-      enabled: true
+#  h2:
+#    console:
+#      enabled: true
   datasource:
-    url: jdbc:h2:~/db
+#    url: jdbc:h2:~/db
+    url: jdbc:postgresql://postgres:5432/jobapp
+    username: postgres
+    password: postgres
   jpa:
     open-in-view: false
     show-sql: true
     hibernate:
       ddl-auto: update
+    database: postgresql
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   jackson:
     default-property-inclusion: non_empty
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  info:
+    env:
+      enabled: true
+info:
+  app:
+    name: "Job App"
+    description: "Learning SpringBoot application"
+    version: "1.0.0"
+server:
+  shutdown: graceful
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        transaction:
+#          interceptor: TRACE

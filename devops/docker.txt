@@ -1,0 +1,30 @@
+docker network create mynetwork
+
+docker run -d `
+  --name postgres `
+  -e POSTGRES_USER=postgres `
+  -e POSTGRES_PASSWORD=password `
+  -e PG_DATA=/data/postgres `
+  -v postgres:/data/postgres `
+  -p 5432:5432 `
+  --network mynetwork `
+  --restart unless-stopped `
+  postgres
+
+docker run -d `
+  --name pgadmin `
+  -e PGADMIN_DEFAULT_EMAIL=nobody@noexis.org `
+  -e PGADMIN_DEFAULT_PASSWORD=postgres `
+  -e PGADMIN_CONFIG_SERVER_MODE=False `
+  -v pgadmin:/var/lib/pgadmin `
+  -p 5050:80 `
+  --network mynetwork `
+  --restart unless-stopped `
+  elestio/pgadmin
+
+docker exec -it pgadmin ping postgres
+docker exec -it postgres ping pgadmin
+
+./mvnw spring-boot:build-image -D"spring-boot.build-image.imageName=someuser/jobappimage"
+
+docker run -p 8080:8080 --name jobapp --network devops_mynetwork -d someuser/jobappimage

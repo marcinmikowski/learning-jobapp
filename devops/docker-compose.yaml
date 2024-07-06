@@ -1,0 +1,41 @@
+version: '3'
+services:
+    postgres:
+        container_name: postgres
+        image: postgres
+        #command: -c ssl=on -c ssl_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem -c ssl_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+        environment:
+            POSTGRES_DB: jobapp
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            PGDATA: /data/postgres
+        volumes:
+            - postgres:/data/postgres
+        ports:
+            - '5432:5432'
+        networks:
+            - mynetwork
+        restart: unless-stopped
+    pgadmin:
+        container_name: pgadmin
+        image: elestio/pgadmin
+        environment:
+            PGADMIN_DEFAULT_EMAIL: pgadmin@nonexi.org
+            PGADMIN_DEFAULT_PASSWORD: postgres
+            PGADMIN_LISTEN_PORT: 8080
+            PGADMIN_CONFIG_SERVER_MODE: "False"
+        ports:
+            - "5050:8080"
+        volumes:
+            - pgadmin:/var/lib/pgadmin
+        networks:
+            - mynetwork
+        restart: unless-stopped
+
+networks:
+    mynetwork:
+        driver: bridge
+
+volumes:
+    postgres:
+    pgadmin:
